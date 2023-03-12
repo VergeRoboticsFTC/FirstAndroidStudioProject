@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.VergeTools;
 
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
 public class Chassis {
     Util util = new Util();
     Motor[] motors = new Motor[4];
@@ -18,13 +20,13 @@ public class Chassis {
     boolean mapLimitSpeedEnableY = false;
     double mapLimitSpeedRotate = 1;
     boolean mapLimitSpeedRotateEnable = false;
-    public Chassis(int frontRight, int backRight, int frontLeft, int backLeft){
+    public Chassis(int frontRight, int backRight, int frontLeft, int backLeft, HardwareMap hardwareMap){
         motorPorts[0] = frontRight;
         motorPorts[1] = backRight;
         motorPorts[2] = backLeft;
         motorPorts[3] = frontLeft;
         for (int i = 0; i < motors.length; i++) {
-            motors[i] = new Motor("motor" + motorPorts[i]);
+            motors[i] = new Motor("motor" + motorPorts[i], hardwareMap);
         }
         motorCount = motors.length;
     }

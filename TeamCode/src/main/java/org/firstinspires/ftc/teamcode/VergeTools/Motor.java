@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.VergeTools;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Teleop.DriverMode;
 import org.firstinspires.ftc.teamcode.Teleop.DriverMode.*;
@@ -18,28 +19,21 @@ public class Motor {
     double holdingPower = 0.2;
     boolean holdEnable = false;
     public volatile boolean running = false;
-    public Motor(String motorName){
+    public Motor(String motorName, HardwareMap hardwareMap){
         name = motorName;
-    }
-
-    public void initMotor(){
-        DriverMode driverMode = new DriverMode();
-        //motor = driverMode.configureMotor(name);
+        motor = hardwareMap.get(DcMotor.class, name);
         motor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
-
     void setDCMotorSpeed(double speed){
         motor.setPower(speed);
     }
-
     void RunDCMotorToPosition(int targetPosition, double speed){
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setTargetPosition(targetPosition);
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        while(motor.isBusy()){}
         System.out.println("Running motor to pos " + targetPosition + " at a speed of " + speed);
+        while(motor.isBusy()){}
     }
-
     public void move(double speed){
         speed = util.clamp(speed, 1);
         speed = limitSpeedEnable ? util.clamp(speed, limitSpeedMin, limitSpeedmax) : speed;
@@ -65,7 +59,6 @@ public class Motor {
             move(0);
         }
     }
-
     public void finish(){
         while (running){}
     }
@@ -95,7 +88,6 @@ public class Motor {
     public void limit(boolean limit){
         limitSpeedEnable = limit;
     }
-
     public void mapLimit(double speed){
         mapLimitSpeedEnable = true;
         speed = Math.abs(util.clamp(speed, 1));
