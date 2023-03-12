@@ -20,6 +20,7 @@ public class Motor {
     boolean holdEnable = false;
     public volatile boolean running = false;
     public Motor(String motorName, HardwareMap hardwareMap){
+
         name = motorName;
         motor = hardwareMap.get(DcMotor.class, name);
         motor.setDirection(DcMotorSimple.Direction.REVERSE);
